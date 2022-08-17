@@ -1,5 +1,5 @@
 query MyQuery {
-  search(query: "stars:>100", type: REPOSITORY, first: 10) {
+  search(query: "stars:>100", type: REPOSITORY, first: 100) {
     nodes {
       ... on Repository {
         id
@@ -19,7 +19,7 @@ query MyQuery {
           id
           name
         }
-        closedIssues: issues(first: 2, filterBy: {states: CLOSED}) {
+        closedIssues: issues(filterBy: {states: CLOSED}) {
           totalCount
         }
         totalIssues: issues {
