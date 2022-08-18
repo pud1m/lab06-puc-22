@@ -1,5 +1,5 @@
 query MyQuery {
-  search(query: "stars:>100", type: REPOSITORY, first: 100) {
+  search(query: "stars:>100", type: REPOSITORY, first: 10) {
     nodes {
       ... on Repository {
         id

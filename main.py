@@ -4,7 +4,13 @@ import json
 
 
 API_URL = 'https://api.github.com/graphql'
-AUTH_TOKEN = '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'
+
+def get_token():
+  """" Returns github personal access token """
+  with open(os.path.join('', '.token'), 'r') as f:
+    token = f.read()
+  return token
+
 
 def get_queries():
   """ Returns an array of graphql queries """
@@ -24,7 +30,7 @@ def fetch_data():
   queries = get_queries()
   data = []
   for query in queries:
-    response = requests.post(API_URL, json={'query': query['query']}, headers={'Authorization': 'bearer ' + AUTH_TOKEN})
+    response = requests.post(API_URL, json={'query': query['query']}, headers={'Authorization': 'Bearer ' + get_token()})
     data.append({
       'name': query['name'],
       'data': response.json()
