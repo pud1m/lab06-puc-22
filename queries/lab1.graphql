@@ -1,5 +1,5 @@
 query MyQuery {
-  search(query: "stars:>100", type: REPOSITORY, first: 10) {
+  search(query: "stars:>100", type: REPOSITORY, first: $first, after: $after) {
     nodes {
       ... on Repository {
         id
@@ -26,6 +26,10 @@ query MyQuery {
           totalCount
         }
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
