@@ -6,7 +6,6 @@ API_URL = 'https://api.github.com/graphql'
 def api_call(query: str):
   """ Fetches data from github api """
   response = requests.post(API_URL, json={'query': query['query']}, headers={'Authorization': 'Bearer ' + get_token()})
-  print(response.json())
   return {
     'name': query['name'],
     'data': response.json()['data']['search']
