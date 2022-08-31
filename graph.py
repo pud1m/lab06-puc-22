@@ -4,14 +4,18 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 def get_age(initial_date):
-  """ Returns age (in days) based on date supplied. """
+  """ Returns age (in years) based on date supplied. """
   initial_date = datetime.strptime(initial_date.split('T')[0], '%Y-%m-%d').date()
   today = date.today()
-  return (today - initial_date).days
+  return (today - initial_date).days / 365
 
-def get_issue_ratio(total_issues, closed_issues):
+
+def get_issue_ratio(row):
   """ Returns ratio of closed issues to total issues. """
-  return closed_issues['totalCount'] / total_issues['totalCount']
+  closed_issues = row['closed_issues_flat']
+  total_issues = row['total_issues_flat']
+  return closed_issues / (total_issues or 1)
+
 
 def flatten_total_value(total_obj):
   """ Flattens a total value """
@@ -20,6 +24,7 @@ def flatten_total_value(total_obj):
   except KeyError:
     value = 0
   return value
+
 
 def flatten_primary_lang(pl):
   """ Flattens primary_lang """
@@ -30,6 +35,7 @@ def flatten_primary_lang(pl):
   except KeyError:
     value = ''
   return value
+
 
 if __name__ == '__main__':
   print('init graph')
@@ -51,8 +57,9 @@ if __name__ == '__main__':
   # Defining closed issue ratio based on closed issues and total issues
   closed_issues = df['closed_issues_flat']
   total_issues = df['total_issues_flat']
-  df['closed_issue_ratio'] = closed_issues.corr(total_issues)
+  df['closed_issue_ratio'] = df.apply(lambda row: get_issue_ratio(row), axis=1)
   
+  RANK = df.index
   RQ1 = df['age']
   RQ2 = df['merged_prs_flat']
   RQ3 = df['releases_flat']
@@ -60,6 +67,5 @@ if __name__ == '__main__':
   RQ5 = df['primary_lang_flat']
   RQ6 = df['closed_issue_ratio']
 
-
-  sns.boxplot(x=RQ1)
+  sns.boxplot(x=RQ6)
   plt.show()
