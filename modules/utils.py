@@ -1,5 +1,15 @@
 import os
 import json
+import csv
+from collections.abc import MutableMapping
+import pandas as pd
+
+def flatten_dict(d: MutableMapping, sep: str= '.') -> MutableMapping:
+  """ Flattens a dictionary.
+    Ref: https://www.freecodecamp.org/news/how-to-flatten-a-dictionary-in-python-in-4-different-ways/
+  """
+  [flat_dict] = pd.json_normalize(d, sep=sep).to_dict(orient='records')
+  return flat_dict
 
 def get_token():
   """" Returns github personal access token """
@@ -27,3 +37,10 @@ def build_json(data: list):
     json_data = json.dumps(response['data'], indent=2)
     with open(f'out/{response["name"]}.json', 'w') as outfile:
       outfile.write(json_data)
+
+
+def build_csv(data: list):
+  """ Builds csv from fetched data and saves it to out folder """
+  for response in data:
+    df = pd.DataFrame.from_dict(flatten_dict(response['data']))
+    df.to_csv (f'out/{response["name"]}.csv', index = False, header=True)
