@@ -3,3 +3,4 @@ out/**
 __pycache__/**
 modules/__pycache__/**
 .DS_STORE
+node_modules

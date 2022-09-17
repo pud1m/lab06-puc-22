@@ -1,0 +1,25 @@
+{
+  "name": "lab06-puc-22",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pud1m/lab06-puc-22.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pud1m/lab06-puc-22/issues"
+  },
+  "homepage": "https://github.com/pud1m/lab06-puc-22#readme",
+  "dependencies": {
+    "csv": "^6.2.0",
+    "json-2-csv": "^3.17.1",
+    "shelljs": "^0.8.5"
+  }
+}
