@@ -4,12 +4,14 @@ import csv
 from collections.abc import MutableMapping
 import pandas as pd
 
+
 def flatten_dict(d: MutableMapping, sep: str= '.') -> MutableMapping:
   """ Flattens a dictionary.
     Ref: https://www.freecodecamp.org/news/how-to-flatten-a-dictionary-in-python-in-4-different-ways/
+    (Modified for context)
   """
-  [flat_dict] = pd.json_normalize(d, sep=sep).to_dict(orient='records')
-  return flat_dict
+  return pd.json_normalize(d, sep=sep).to_dict(orient='records')
+
 
 def get_token():
   """" Returns github personal access token """
