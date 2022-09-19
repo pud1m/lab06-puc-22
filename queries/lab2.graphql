@@ -1,0 +1,19 @@
+query MyQuery {
+  search(query: "language:java", type: REPOSITORY, first: $first, after: $after) {
+    nodes {
+      ... on Repository {
+        name
+        createdAt
+        releases {
+          totalCount
+        }
+        stargazerCount
+        url
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
