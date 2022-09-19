@@ -22,12 +22,13 @@ def get_queries():
   """ Returns an array of graphql queries """
   query_list = []
   for filename in os.listdir('queries'):
-    with open(os.path.join('queries', filename), 'r') as f:
-      query = f.read()
-      query_list.append({
-        'query': query,
-        'name': filename.replace('.graphql', '')
-      })
+    if '.graphql' in filename:
+      with open(os.path.join('queries', filename), 'r') as f:
+        query = f.read()
+        query_list.append({
+          'query': query,
+          'name': filename.replace('.graphql', '')
+        })
   return query_list
 
 
