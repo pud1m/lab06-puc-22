@@ -51,9 +51,9 @@ def get_paginated(
   )
 
 
-def fetch_data(page_size: int = 100, max_value: int = 100):
+def fetch_data(query_name: str, page_size: int = 100, max_value: int = 100):
   """ Entrypoint fetch function """
-  queries = get_queries()
+  queries = get_queries(query_name)
   data = []
   for query in queries:
     print(f'### Fetching data for {query["name"]}')

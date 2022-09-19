@@ -20,10 +20,16 @@ def get_token():
   return token
 
 
-def get_queries():
+def get_queries(query_name: str = None):
   """ Returns an array of graphql queries """
   query_list = []
-  for filename in os.listdir('queries'):
+  
+  if query_name is None:
+    file_list = os.listdir('queries')
+  else:
+    file_list = [f'{query_name}.graphql']
+
+  for filename in file_list:
     if '.graphql' in filename:
       with open(os.path.join('queries', filename), 'r') as f:
         query = f.read()

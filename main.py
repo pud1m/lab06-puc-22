@@ -5,13 +5,15 @@ from modules.utils import build_json, build_csv
 # Getting args from cmd
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', dest='output', help='Type of output')
+parser.add_argument('--queryname', dest='queryname', help='Name of the query file', default=None)
 
 args = parser.parse_args()
 
 if __name__ == '__main__':
   raw_query_data = fetch_data(
+    query_name = args.queryname,
     page_size = 10,
-    max_value = 1000
+    max_value = 10
   )
   if args.output == 'json':
     build_json(raw_query_data)
