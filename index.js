@@ -3,7 +3,8 @@ const { parse } = require("csv-parse");
 const shell = require("shelljs");
 const converter = require("json-2-csv");
 
-const names = [];
+const today  = new Date();
+const fields = [];
 const urls = [];
 const csvToJsonResult = [];
 const data = [];
@@ -79,10 +80,12 @@ const calcLoc = () => {
   return resp;
 };
 
-fs.createReadStream("./out/lab01.csv")
+fs.createReadStream("./out/lab2.csv")
   .pipe(parse({ delimiter: ",", from_line: 2 }))
   .on("data", (row) => {
-    row.map((name) => names.push(name));
+    row.map((field) => {
+      fields.push(field);
+    });
     row.map((url) => url.includes("https") && urls.push(url));
   })
   .on("end", () => {
@@ -102,8 +105,12 @@ fs.createReadStream("./out/lab01.csv")
       const csvMethod = fs.readFileSync("./ck/target/method.csv");
       csvToJson(csvMethod);
       const loc = calcLoc();
+      const createData  = new Date(fields[1]);
       data.push({
-        name: names[0],
+        name: fields[0],
+        operatingTime: today.getFullYear() - createData.getFullYear(),
+        popularity: fields[2],
+        releases: fields[4], 
         url: url,
         cbo: cbo,
         dit: dit,
@@ -118,13 +125,10 @@ fs.createReadStream("./out/lab01.csv")
         throw err;
       }
 
-      // print CSV string
-      console.log(csv);
-
       // write CSV to a file
       fs.writeFileSync("./out/Arquivo.csv", csv);
     });
-    console.log(data);
+
   })
   .on("error", (error) => {
     console.log(error.message);
