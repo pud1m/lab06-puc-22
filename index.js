@@ -42,14 +42,14 @@ const csvToJson = (csv) => {
 
 const calcCBO = () => {
   const resp = csvToJsonResult
-    .filter((result) => !Number.isNaN(parseInt(result.cbo)) === false)
+    .filter((result) => !Number.isNaN(parseInt(result.cbo)))
     .reduce((acc, values) => acc + parseInt(values.cbo), 0);
   return resp;
 };
 
 const calcDit = () => {
   const resp = csvToJsonResult
-    .filter((result) => Number.isNaN(parseInt(result.dit)) === false)
+    .filter((result) => !Number.isNaN(parseInt(result.dit)))
     .reduce(
       (prev, current) =>
         current.dit && parseInt(prev.dit) > parseInt(current.dit)
@@ -61,23 +61,16 @@ const calcDit = () => {
 };
 
 const calcLcom_as = () => {
-  const filted = csvToJsonResult
-    .filter((number) => Number.isNaN(parseFloat(number["lcom*"])) === false)
-    .sort((a, b) => a["lcom*"] - b["lcom*"]);
-  const length = filted.length;
-  const half = Math.floor(length / 2);
+  const concat = csvToJsonResult.sort((a, b) => a["lcom*"] - b["lcom*"]);
 
-  const resp1 = filted[length / 2];
-  const resp2 = filted[length / 2 - 1];
-  const resp3 = parseFloat(resp1["lcom*"]) === undefined ? 0.0 : parseFloat(resp1["lcom*"]);
-  const resp4 = parseFloat(resp2["lcom*"]) === undefined ? 0.0 : parseFloat(resp2["lcom*"]);
-  const resp5 = resp3 + resp4
-  const resp6 = resp5 / 2.0;
-
-  if (length % 2) {
-    return  parseFloat(resp1[half]["lcom*"]);
+  if (concat.length % 2 == 1) {
+    return parseFloat(concat[concat.length / 2 - 0.5]["lcom*"]);
   } else {
-    return resp6;
+    return parseFloat (
+      (concat[concat.length / 2]["lcom*"] +
+        concat[concat.length / 2 - 1]["lcom*"]) /
+      2
+    );
   }
 };
 
