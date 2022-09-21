@@ -69,8 +69,8 @@ const calcLcom_as = () => {
 
   const resp1 = filted[length / 2];
   const resp2 = filted[length / 2 - 1];
-  const resp3 = parseFloat(resp1["lcom*"]) === undefined ? 0.0 : parseFloat(resp1["lcom*"]) + parseFloat(resp2["lcom*"]);
-  const resp4 = parseFloat(resp2["lcom*"]) === undefined ? 0.0 : parseFloat(resp1["lcom*"]) + parseFloat(resp2["lcom*"]);
+  const resp3 = parseFloat(resp1["lcom*"]) === undefined ? 0.0 : parseFloat(resp1["lcom*"]);
+  const resp4 = parseFloat(resp2["lcom*"]) === undefined ? 0.0 : parseFloat(resp2["lcom*"]);
   const resp5 = resp3 + resp4
   const resp6 = resp5 / 2.0;
 
