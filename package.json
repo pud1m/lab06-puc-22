@@ -19,6 +19,7 @@
   "homepage": "https://github.com/pud1m/lab06-puc-22#readme",
   "dependencies": {
     "csv": "^6.2.0",
+    "csv-stringify": "^6.2.0",
     "json-2-csv": "^3.17.1",
     "shelljs": "^0.8.5"
   }
