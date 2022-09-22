@@ -1,3 +1,4 @@
+'use strict';
 const { csvToJson, calcCBO, calcDit, calcLcom_as, calcLoc } = require("./calc");
 const fs = require("fs");
 const { stringify } = require("csv-stringify");
@@ -5,23 +6,23 @@ const { parse } = require("csv-parse");
 const shell = require("shelljs");
 
 const today = new Date();
-let data = null;
-
-const columns = [
-  "name",
-  "operatingTime",
-  "popularity",
-  "releases",
-  "cbo",
-  "dit",
-  "lcom_as",
-  "loc",
-];
 
 const path = "~/Documentos/pessoal/lab6/lab06-puc-22/repos";
 
 const writableStream = fs.createWriteStream("./out/Arquivo.csv");
-const stringifier = stringify({ header: true, columns: columns });
+const stringifier = stringify({
+  header: true,
+  columns: [
+    "name",
+    "operatingTime",
+    "popularity",
+    "releases",
+    "cbo",
+    "dit",
+    "lcom_as",
+    "loc",
+  ],
+});
 
 fs.createReadStream("./out/lab2.csv")
   .pipe(parse({ delimiter: ",", from_line: 2 }))
@@ -44,7 +45,7 @@ fs.createReadStream("./out/lab2.csv")
 
     const createData = new Date(row[1]);
 
-    data = {
+    stringifier.write({
       name: row[0],
       operatingTime: today.getFullYear() - createData.getFullYear(),
       popularity: row[2],
@@ -54,15 +55,15 @@ fs.createReadStream("./out/lab2.csv")
       dit: dit,
       lcom_as: lcom_as,
       loc: loc,
-    };
-
-    stringifier.write(data);
+    });
     stringifier.pipe(writableStream);
+    shell.rm("-rf", "./repos/*");
   })
   .on("end", () => {
     console.log("Finished writing data");
-    shell.rm("-rf", "./repos/*");
   })
   .on("error", (error) => {
+    stringifier.pipe(writableStream);
+    shell.rm("-rf", "./repos/*");
     console.log(error.message);
   });

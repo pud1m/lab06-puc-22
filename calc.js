@@ -40,12 +40,14 @@ const calcCBO = () => {
   const half = Math.floor(resp.length / 2);
   let item = null;
 
-  if (resp.length % 2) {
+  if (resp.length % 2 === 1) {
     item = resp[half];
     return parseInt(item.cbo);
-  } else {
-    item = (resp[half - 1] + resp[half]) / 2.0;
-    return parseInt(item.cbo);
+  }
+
+  if (resp.length % 2 === 0) {
+    item = (parseInt(resp[half - 1].cbo) + parseInt(resp[half].cbo)) / 2.0;
+    return item;
   }
 };
 
