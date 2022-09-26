@@ -10,6 +10,7 @@ const { retry } = require("./modulesjs/helpers");
 
 const cluster = require("cluster");
 const v8 = require("v8");
+const _ = require("lodash");
 const fs = require("fs");
 const { stringify } = require("csv-stringify");
 const { parse } = require("csv-parse");
@@ -18,21 +19,6 @@ const shell = require("shelljs");
 const today = new Date();
 
 const path = "~/Documentos/pessoal/lab6/lab06-puc-22/repos";
-
-const writableStream = fs.createWriteStream("./out/Arquivo.csv");
-const stringifier = stringify({
-  header: true,
-  columns: [
-    "name",
-    "operatingTime",
-    "popularity",
-    "releases",
-    "cbo",
-    "dit",
-    "lcom_as",
-    "loc",
-  ],
-});
 
 const getMetrics = async () => {
   await retry(() =>
@@ -64,6 +50,7 @@ if (cluster.isMaster) {
   };
 
   setInterval(detectHeapOverflow, 1000);
+  let data = [];
   fs.createReadStream("./out/lab2.csv")
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", (row) => {
@@ -86,7 +73,7 @@ if (cluster.isMaster) {
 
       const createData = new Date(row[1]);
 
-      stringifier.write({
+      data.push({
         name: row[0],
         operatingTime: today.getFullYear() - createData.getFullYear(),
         popularity: row[2],
@@ -97,15 +84,35 @@ if (cluster.isMaster) {
         lcom_as: lcom_as,
         loc: loc,
       });
-      stringifier.pipe(writableStream);
       shell.rm("-rf", "./repos/*");
     })
     .on("end", () => {
+      const stringifier = stringify({
+        header: true,
+        columns: [
+          "name",
+          "operatingTime",
+          "popularity",
+          "releases",
+          "cbo",
+          "dit",
+          "lcom_as",
+          "loc",
+        ],
+      });
+      let i = 6;
+      const writableStream = fs.createWriteStream(`./out/Arquivo${i}.csv`);
+
+      const dataBatch = _.chunk(data, 50);
+      for (const batch of dataBatch) {
+        batch.map((d) => {
+          stringifier.write(d);
+        });
+      }
+      stringifier.pipe(writableStream);
       console.log("Finished writing data");
     })
     .on("error", (error) => {
-      stringifier.pipe(writableStream);
-      shell.rm("-rf", "./repos/*");
       console.log(error.message);
     });
 }
